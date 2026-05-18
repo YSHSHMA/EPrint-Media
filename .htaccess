@@ -1,0 +1,61 @@
+########################################
+# CORE REWRITE RULES
+########################################
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1️⃣ Redirect index.html → homepage
+    RewriteCond %{THE_REQUEST} \s/index\.html [NC]
+    RewriteRule ^index\.html$ / [R=301,L]
+
+    # 2️⃣ Force HTTPS + WWW (single redirect)
+    RewriteCond %{HTTPS} off [OR]
+    RewriteCond %{HTTP_HOST} !^www\.trendifybuzz\.com$ [NC]
+    RewriteRule ^(.*)$ https://www.trendifybuzz.com/$1 [R=301,L]
+
+    # 3️⃣ Remove trailing slash (except real directories)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [R=301,L]
+
+    # Rewrite front-assets → public/front-assets
+    RewriteCond %{REQUEST_URI} ^/front-assets/ [NC]
+    RewriteRule ^front-assets/(.*)$ public/front-assets/$1 [L]
+
+    # Rewrite admin-assets → public/admin-assets
+    RewriteCond %{REQUEST_URI} ^/admin-assets/ [NC]
+    RewriteRule ^admin-assets/(.*)$ public/admin-assets/$1 [L]
+
+    # Authorization header support
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Laravel / Front Controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+########################################
+# NOINDEX AJAX / UTILITY URLS
+########################################
+<IfModule mod_headers.c>
+    <LocationMatch "/(load-more-posts|search)$">
+        Header set X-Robots-Tag "noindex, nofollow"
+    </LocationMatch>
+</IfModule>
+
+########################################
+# BOT PROTECTION (SAFE & SEO FRIENDLY)
+########################################
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow Google & AdSense bots
+    RewriteCond %{HTTP_USER_AGENT} (googlebot|adsbot-google|mediapartners-google|google-image|google-news) [NC]
+    RewriteRule .* - [L]
+
+    # Block bad / scraping / AI bots
+    RewriteCond %{HTTP_USER_AGENT} (ahrefsbot|semrushbot|mj12bot|dotbot|rogerbot|linkdexbot|seokicks|sistrix|cognitivebot|exabot|siteexplorer|yandexbot|baiduspider|petalbot|ccbot|ia_archiver|python|curl|wget|httpclient|scrapy) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
