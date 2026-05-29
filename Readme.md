@@ -6,14 +6,12 @@ EPrint-Media is a digital publishing and media management platform designed to s
 
 ## Landing Page Image
 
-```md
 <p align="center">
   <img src="./public/front-assets/images/eprint-media.png" alt="EPrint Media Landing Page" width="100%">
 </p>
 
-```
-
 ---
+
 
 ## Tech Stack
 
