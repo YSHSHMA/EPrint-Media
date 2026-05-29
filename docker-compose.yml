@@ -32,10 +32,10 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: news
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-      MYSQL_USER: laravel
+      MYSQL_USER: root
     ports:
       - "3306:3306"
     volumes:
