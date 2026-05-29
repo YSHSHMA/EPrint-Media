@@ -120,7 +120,7 @@
             <span class="f1-s-1 cl0 txt-center">
                 <a href="#" class="f1-s-1 cl10 hov-link1">
                     Copyright &copy; {{ configData()->copyright }} <strong>{{ configData()->name }}</strong> All rights reserved | <i class="fa fa-heart"
-                        aria-hidden="true"></i> by Decoder
+                        aria-hidden="true"></i> by Yash Sharma
             </span>
         </div>
     </div>
