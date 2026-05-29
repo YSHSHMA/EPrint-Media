@@ -7,11 +7,11 @@ EPrint-Media is a digital publishing and media management platform designed to s
 ## Landing Page Image
 
 ```md
-![EPrint Media Landing](public/front-assets/images/eprint-media.png)
+<p align="center">
+  <img src="./public/front-assets/images/eprint-media.png" alt="EPrint Media Landing Page" width="100%">
+</p>
+
 ```
-
-Markdown image code above will display the PNG located here: `public/front-assets/images/eprint-media.png`.
-
 
 ---
 
