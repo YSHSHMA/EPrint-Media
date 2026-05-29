@@ -1,6 +1,6 @@
-# Project Name
+# EPrint Media
 
-Short project description here. Explain what the project does and its main purpose.
+EPrint-Media is a digital publishing and media management platform designed to streamline content handling, publication workflows, and efficient media organization.
 
 ---
 
@@ -38,8 +38,8 @@ git --version
 Clone the project:
 
 ```bash
-git clone <repository-url>
-cd <project-folder>
+git clone: https://github.com/YSHSHMA/EPrint-Media.git
+cd EPrint
 ```
 
 ---
@@ -378,6 +378,6 @@ Contributions, issues, and feature requests are welcome.
 
 ---
 
-## License
+## Owner
 
-Add your preferred license information here.
+© Yash Sharma. All Rights Reserved. For support, questions, or issue reporting, feel free to email: 06yashsharma@gmail.com
