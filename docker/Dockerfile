@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     zip \
+    nginx \
+    supervisor \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
