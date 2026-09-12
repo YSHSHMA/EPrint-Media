@@ -43,21 +43,28 @@ RUN composer install \
 # Copy application
 COPY . .
 
-# Create Laravel writable directories
+# Install/build frontend
+RUN npm install && npm run build
+
+# Laravel permissions
 RUN mkdir -p storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
-    bootstrap/cache
-
-# Permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
+    bootstrap/cache \
+    && chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
-# Install frontend dependencies and build assets
-RUN npm install \
-    && npm run build
+# Nginx configuration
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 9000
+# Supervisor configuration
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD ["php-fpm"]
+# Remove default nginx configuration
+RUN rm -f /etc/nginx/sites-enabled/default \
+    /etc/nginx/conf.d/default.conf.bak
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-n"]
