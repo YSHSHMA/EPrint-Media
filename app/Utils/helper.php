@@ -8,7 +8,29 @@ use Illuminate\Support\Facades\Http;
 if (!function_exists('configData')) {
     function configData()
     {
-        return Config::first();
+        $config = Config::first();
+
+        if (!$config) {
+            return (object) [
+                'id' => 1,
+                'name' => 'EPrint Media',
+                'email' => 'hello@example.com',
+                'phone' => '0000000000',
+                'address' => 'N/A',
+                'copyright' => 'EPrint Media',
+                'header_logo' => 'front-assets/images/logo.png',
+                'footer_logo' => 'front-assets/images/logo.png',
+                'favicon' => 'front-assets/images/favicon.png',
+                'loader' => 'front-assets/images/loader.gif',
+                'facebook' => null,
+                'instagram' => null,
+                'youtube' => null,
+                'twitter' => null,
+                'maintenance_mode' => 0,
+            ];
+        }
+
+        return $config;
     }
 }
 

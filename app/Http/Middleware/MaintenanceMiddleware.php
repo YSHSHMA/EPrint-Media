@@ -15,9 +15,12 @@ class MaintenanceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(configData()->maintenance_mode == 1){
+        $config = configData();
+
+        if (is_object($config) && isset($config->maintenance_mode) && (int) $config->maintenance_mode === 1) {
             return redirect(url('maintenance-mode'));
         }
+
         return $next($request);
     }
 }
