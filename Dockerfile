@@ -57,12 +57,17 @@ RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
 # --------------------------------------------------
 # Copy application
 # --------------------------------------------------
 COPY . .
+
+RUN composer dump-autoload \
+    --no-dev \
+    --optimize
 
 # --------------------------------------------------
 # Frontend dependencies
