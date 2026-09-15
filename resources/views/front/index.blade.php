@@ -173,6 +173,7 @@
                 <div class="col-md-10 col-lg-8">
                     <div class="p-b-20">
 
+                        @if ($techPosts->isNotEmpty())
                         {{-- technology --}}
                         <div class="tab01 p-b-20">
                             <div class="tab01-head how2 how2-cl1 bocl12 flex-s-c m-r-10 m-r-0-sr991">
@@ -251,6 +252,9 @@
                             </div>
                         </div>
 
+                        @endif
+
+                        @if ($financePosts->isNotEmpty())
                         <!-- finance -->
                         <div class="tab01 p-b-20">
                             <div class="tab01-head how2 how2-cl2 bocl12 flex-s-c m-r-10 m-r-0-sr991">
@@ -336,6 +340,8 @@
                             </div>
                         </div>
 
+                        @endif
+
                         {{-- start ezoic add --}}
                         {{-- <div id="ezoic-pub-ad-placeholder-109"></div>
                         <script>
@@ -345,6 +351,7 @@
                         </script> --}}
                         {{-- end ezoic add --}}
 
+                        @if ($healthPosts->isNotEmpty())
                         <!-- Health -->
                         <div class="tab01 p-b-20">
                             <div class="tab01-head how2 how2-cl3 bocl12 flex-s-c m-r-10 m-r-0-sr991">
@@ -429,6 +436,9 @@
                             </div>
                         </div>
 
+                        @endif
+
+                        @if ($entertainmentPosts->isNotEmpty())
                         <!-- Entertainment -->
                         <div class="tab01 p-b-20">
                             <div class="tab01-head how2 how2-cl4 bocl12 flex-s-c m-r-10 m-r-0-sr991">
@@ -515,6 +525,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
 
