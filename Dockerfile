@@ -98,7 +98,7 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 # --------------------------------------------------
 # Supervisor configuration
 # --------------------------------------------------
-COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # --------------------------------------------------
 # Expose HTTP
