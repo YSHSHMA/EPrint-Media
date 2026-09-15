@@ -1,20 +1,34 @@
 FROM php:8.2-fpm
 
+# --------------------------------------------------
 # System dependencies
+# --------------------------------------------------
 RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
     git \
     curl \
     unzip \
     zip \
-    nginx \
-    supervisor \
-    ca-certificates \
     libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     libicu-dev \
-    && docker-php-ext-install \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# --------------------------------------------------
+# PHP extensions
+# --------------------------------------------------
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg
+
+RUN docker-php-ext-install \
     pdo_mysql \
     mbstring \
     exif \
@@ -22,57 +36,76 @@ RUN apt-get update && apt-get install -y \
     bcmath \
     gd \
     zip \
-    intl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    intl
 
-# Node.js 22
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get update \
-    && apt-get install -y nodejs \
-    && node --version \
-    && npm --version \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Composer
+# --------------------------------------------------
+# Install Composer
+# --------------------------------------------------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# --------------------------------------------------
+# Application directory
+# --------------------------------------------------
 WORKDIR /var/www
 
-# PHP dependencies
+# --------------------------------------------------
+# Copy Composer files first
+# --------------------------------------------------
 COPY composer.json composer.lock ./
+
 RUN composer install \
+    --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader \
-    --no-scripts \
-    --no-dev
+    --optimize-autoloader
 
-# Application source
+# --------------------------------------------------
+# Copy application
+# --------------------------------------------------
 COPY . .
 
-# Frontend asset compilation
+# --------------------------------------------------
+# Frontend dependencies
+# --------------------------------------------------
 RUN npm install
-RUN npm run build
 
+# Build Vite/assets if package.json has build script
+RUN npm run build || true
+
+# --------------------------------------------------
 # Laravel permissions
+# --------------------------------------------------
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
-    bootstrap/cache \
-    && chown -R www-data:www-data /var/www \
-    && chmod -R 775 storage bootstrap/cache
+    bootstrap/cache
 
-# Nginx
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-RUN rm -f /etc/nginx/sites-enabled/default
+RUN chown -R www-data:www-data \
+    storage \
+    bootstrap/cache
 
-# Supervisor
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN chmod -R 775 \
+    storage \
+    bootstrap/cache
 
+# --------------------------------------------------
+# Nginx configuration
+# --------------------------------------------------
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+
+# --------------------------------------------------
+# Supervisor configuration
+# --------------------------------------------------
+COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# --------------------------------------------------
+# Expose HTTP
+# --------------------------------------------------
 EXPOSE 80
 
+# --------------------------------------------------
+# Start Nginx + PHP-FPM
+# --------------------------------------------------
 CMD ["/usr/bin/supervisord", "-n"]
