@@ -14,6 +14,16 @@ class HomeController extends Controller
     public function index(){
         $trendings = Post::where('is_trending',1)->where('status',1)->get();
         $featured = Post::where('is_featured',1)->where('status',1)->with('category')->latest()->take(4)->get();
+        if ($featured->count() < 4) {
+            $fallbackFeatured = Post::where('status',1)
+                ->whereNotIn('id', $featured->modelKeys())
+                ->with('category')
+                ->latest()
+                ->take(4 - $featured->count())
+                ->get();
+
+            $featured = $featured->concat($fallbackFeatured);
+        }
         $techPosts = Post::where('category_id',2)->where('status',1)->latest()->take(4)->get();
         $financePosts = Post::where('category_id',3)->where('status',1)->latest()->take(4)->get();
         $healthPosts = Post::where('category_id',4)->where('status',1)->latest()->take(4)->get();

@@ -57,6 +57,7 @@
     </div>
 
     <!-- Feature post -->
+    @if ($featured->count() >= 4)
     <section class="bg0">
         <div class="container">
             <div class="row m-rl--1">
@@ -154,6 +155,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- start ezoic add --}}
     {{-- <div id="ezoic-pub-ad-placeholder-102"></div>
