@@ -113,4 +113,4 @@ EXPOSE 80
 # --------------------------------------------------
 # Start Nginx + PHP-FPM
 # --------------------------------------------------
-CMD ["/usr/bin/supervisord", "-n"]
+CMD ["/bin/bash", "/var/www/docker/start.sh"]

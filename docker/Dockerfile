@@ -63,6 +63,10 @@ RUN composer install \
 # --------------------------------------------------
 COPY . .
 
+RUN composer dump-autoload \
+    --no-dev \
+    --optimize
+
 # --------------------------------------------------
 # Frontend
 # --------------------------------------------------
@@ -95,4 +99,4 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-n"]
+CMD ["/bin/bash", "/var/www/docker/start.sh"]
