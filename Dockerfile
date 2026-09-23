@@ -39,18 +39,15 @@ RUN docker-php-ext-install \
     intl
 
 # --------------------------------------------------
-# Install Composer
+# Composer
 # --------------------------------------------------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # --------------------------------------------------
-# Application directory
+# Application
 # --------------------------------------------------
 WORKDIR /var/www
 
-# --------------------------------------------------
-# Copy Composer files first
-# --------------------------------------------------
 COPY composer.json composer.lock ./
 
 RUN composer install \
@@ -60,9 +57,6 @@ RUN composer install \
     --optimize-autoloader \
     --no-scripts
 
-# --------------------------------------------------
-# Copy application
-# --------------------------------------------------
 COPY . .
 
 RUN composer dump-autoload \
@@ -70,11 +64,10 @@ RUN composer dump-autoload \
     --optimize
 
 # --------------------------------------------------
-# Frontend dependencies
+# Frontend
 # --------------------------------------------------
 RUN npm install
 
-# Build Vite/assets if package.json has build script
 RUN npm run build || true
 
 # --------------------------------------------------
@@ -96,21 +89,8 @@ RUN chmod -R 775 \
     bootstrap/cache
 
 # --------------------------------------------------
-# Nginx configuration
+# PHP-FPM
 # --------------------------------------------------
-COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+EXPOSE 9000
 
-# --------------------------------------------------
-# Supervisor configuration
-# --------------------------------------------------
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# --------------------------------------------------
-# Expose HTTP
-# --------------------------------------------------
-EXPOSE 80
-
-# --------------------------------------------------
-# Start Nginx + PHP-FPM
-# --------------------------------------------------
-CMD ["/bin/bash", "/var/www/docker/start.sh"]
+CMD ["php-fpm"]
