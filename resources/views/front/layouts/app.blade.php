@@ -59,6 +59,8 @@
     <meta name="robots" content="max-image-preview:large">
     @yield('meta')
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     {{-- css --}}
     <link rel="icon" type="image/png" href="{{ asset(configData()->favicon) }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/vendor/bootstrap/css/bootstrap.min.css') }}">

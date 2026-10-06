@@ -8,9 +8,9 @@
         <!-- Header Mobile -->
         <div class="wrap-header-mobile">
             <!-- Logo moblie -->
-            <div class="logo-mobile">
+            <!-- <div class="logo-mobile">
                 <a href="{{ route('index') }}"><img src="{{ asset(configData()->header_logo) }}" alt="{{configData()->name}}"></a>
-            </div>
+            </div> -->
 
             <!-- Button show menu -->
             <div class="btn-show-menu-mobile hamburger hamburger--squeeze m-r--8">

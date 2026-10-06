@@ -68,7 +68,8 @@ RUN composer dump-autoload \
 # --------------------------------------------------
 RUN npm install
 
-RUN npm run build || true
+RUN npm run build \
+    && cp -a public/build /var/www/vite-build
 
 # --------------------------------------------------
 # Laravel permissions

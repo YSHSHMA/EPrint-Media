@@ -12,8 +12,12 @@ services:
       - "9000"
     volumes:
       - storage_data:/var/www/storage
+      - vite_build:/var/www/public/build
+    command: ["sh", "-c", "rm -rf /var/www/public/build/* && cp -a /var/www/vite-build/. /var/www/public/build/ && exec php-fpm"]
     # depends_on:
-    #   - db
+    #   - mysql
+    networks:
+      - eprint-network
 
   nginx:
     image: nginx:latest
@@ -26,7 +30,10 @@ services:
     volumes:
       - ./:/var/www
       - storage_data:/var/www/storage
+      - vite_build:/var/www/public/build
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - eprint-network
 
   # mysql:
   #   image: mysql:8.0
@@ -39,8 +46,15 @@ services:
   #     - "3306:3306"
   #   volumes:
   #     - mysql_data:/var/lib/mysql
+  #     - ./database/db-file/news.sql:/docker-entrypoint-initdb.d/01-news.sql:ro
+  #   networks:
+  #     - eprint-network
 
 
 volumes:
   storage_data:
   # mysql_data:
+  vite_build:
+
+networks:
+  eprint-network:

@@ -66,25 +66,26 @@ class HomeController extends Controller
     }
 
     public function about_us(){
-        $agreement = Agreement::where('name','About Us')->first();
-        $popularPosts = Post::where('is_popular',1)->where('status',1)->latest()->take(5)->get();
-        return view('front.agreement', compact('agreement','popularPosts'));
+        return $this->agreementPage(['About Us']);
     }
 
     public function disclaimer(){
-        $agreement = Agreement::where('name','Disclaimer')->first();
-        $popularPosts = Post::where('is_popular',1)->where('status',1)->latest()->take(5)->get();
-        return view('front.agreement', compact('agreement','popularPosts'));
+        return $this->agreementPage(['Disclaimer']);
     }
 
     public function privacy_policy(){
-        $agreement = Agreement::where('name','Privacy Policy')->first();
-        $popularPosts = Post::where('is_popular',1)->where('status',1)->latest()->take(5)->get();
-        return view('front.agreement', compact('agreement','popularPosts'));
+        return $this->agreementPage(['Privacy Policy']);
     }
 
     public function terms_condition(){
-        $agreement = Agreement::where('name','Terms & Conditions')->first();
+        return $this->agreementPage(['Terms & Conditions', 'Terms and Condition']);
+    }
+
+    private function agreementPage(array $names)
+    {
+        $agreement = Agreement::whereIn('name', $names)->first();
+        abort_unless($agreement, 404);
+
         $popularPosts = Post::where('is_popular',1)->where('status',1)->latest()->take(5)->get();
         return view('front.agreement', compact('agreement','popularPosts'));
     }
